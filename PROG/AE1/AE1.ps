@@ -1,0 +1,1603 @@
+%!PS-Adobe-3.0
+%%Title: AssEx1.java, CustomerAccount.java, LWMGUI.java, Wine.java
+%%For: Unknown User
+%%Creator: a2ps version 4.14
+%%CreationDate: Sat Nov 04 19:15:35 2017
+%%BoundingBox: 24 24 571 818
+%%DocumentData: Clean7Bit
+%%Orientation: Landscape
+%%Pages: 5
+%%PageOrder: Ascend
+%%DocumentMedia: A4 595 842 0 () ()
+%%DocumentNeededResources: font Courier
+%%+ font Courier-Bold
+%%+ font Courier-BoldOblique
+%%+ font Courier-Oblique
+%%+ font Helvetica
+%%+ font Helvetica-Bold
+%%+ font Symbol
+%%+ font Times-Bold
+%%+ font Times-Roman
+%%DocumentProcessColors: Black 
+%%DocumentSuppliedResources: procset a2ps-a2ps-hdr
+%%+ procset a2ps-black+white-Prolog
+%%+ encoding ISO-8859-1Encoding
+%%EndComments
+/a2psdict 200 dict def
+a2psdict begin
+%%BeginProlog
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Check PostScript language level.
+/languagelevel where {
+  pop /gs_languagelevel languagelevel def
+} {
+  /gs_languagelevel 1 def
+} ifelse
+
+% EPSF import as in the Red Book
+/BeginInclude {
+  /b4_Inc_state save def    		% Save state for cleanup
+  /dict_count countdictstack def	% Count objects on dict stack
+  /op_count count 1 sub def		% Count objects on operand stack 
+  userdict begin
+    0 setgray 0 setlinecap
+    1 setlinewidth 0 setlinejoin
+    10 setmiterlimit [ ] 0 setdash newpath
+    gs_languagelevel 1 ne {
+      false setstrokeadjust false setoverprint 
+    } if
+} bind def
+
+/EndInclude {
+  count op_count sub { pos } repeat	% Clean up stacks
+  countdictstack dict_count sub { end } repeat
+  b4_Inc_state restore
+} bind def
+
+/BeginEPSF {
+  BeginInclude
+  /showpage { } def
+} bind def
+
+/EndEPSF {
+  EndInclude
+} bind def
+
+% Page prefeed
+/page_prefeed {         % bool -> -
+  statusdict /prefeed known {
+    statusdict exch /prefeed exch put
+  } {
+    pop
+  } ifelse
+} bind def
+
+/deffont {
+  findfont exch scalefont def
+} bind def
+
+/reencode_font {
+  findfont reencode 2 copy definefont pop def
+} bind def
+
+% Function c-show (str => -)
+% centers text only according to x axis.
+/c-show { 
+  dup stringwidth pop
+  2 div neg 0 rmoveto
+  show
+} bind def
+
+% Function l-show (str => -)
+% prints texts so that it ends at currentpoint
+/l-show {
+  dup stringwidth pop neg 
+  0 
+  rmoveto show
+} bind def
+
+% center-fit show (str w => -)
+% show centered, and scale currentfont so that the width is less than w
+/cfshow {
+  exch dup stringwidth pop
+  % If the title is too big, try to make it smaller
+  3 2 roll 2 copy
+  gt
+  { % if, i.e. too big
+    exch div
+    currentfont exch scalefont setfont
+  } { % ifelse
+    pop pop 
+  }
+  ifelse
+  c-show			% center title
+} bind def
+
+% Return the y size of the current font
+% - => fontsize
+/currentfontsize {
+  currentfont /FontMatrix get 3 get 1000 mul
+} bind def
+
+% reencode the font
+% <encoding-vector> <fontdict> -> <newfontdict>
+/reencode { %def
+  dup length 5 add dict begin
+    { %forall
+      % <vector> <key> <val>
+      1 index /FID ne 
+      { def }{ pop pop } ifelse
+    } forall
+    /Encoding exch def % -
+
+    % Use the font's bounding box to determine the ascent, descent,
+    % and overall height; don't forget that these values have to be
+    % transformed using the font's matrix.
+    % We use `load' because sometimes BBox is executable, sometimes not.
+    % Since we need 4 numbers an not an array avoid BBox from being executed
+    /FontBBox load aload pop
+    FontMatrix transform /Ascent exch def pop
+    FontMatrix transform /Descent exch def pop
+    /FontHeight Ascent Descent sub def
+
+    % Get the underline position and thickness if they're defined.
+    % Use 1 if they are not defined.
+    currentdict /FontInfo 2 copy known
+    { get
+      /UnderlinePosition 2 copy % <FontInfo> /UP <FontInfo> /UP
+      2 copy known
+      { get }{ pop pop 1 } ifelse
+      0 exch FontMatrix transform exch pop
+      def % <FontInfo>
+
+      /UnderlineThickness 2 copy % <FontInfo> /UT <FontInfo> /UT
+      2 copy known
+      { get }{ pop pop 1 } ifelse
+      0 exch FontMatrix transform exch pop
+      def % <FontInfo>
+      pop % -
+    }{ pop pop
+    } ifelse
+
+    currentdict
+  end 
+} bind def
+
+% Function print line number (<string> # -)
+/# {
+  gsave
+    sx cw mul neg 2 div 0 rmoveto
+    f# setfont
+    c-show
+  grestore
+} bind def
+
+% -------- Some routines to enlight plain b/w printings ---------
+
+% Underline
+% width --
+/dounderline {
+  currentpoint
+  gsave
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    0 rlineto
+    stroke
+  grestore
+} bind def
+
+% Underline a string
+% string --
+/dounderlinestring {
+  stringwidth pop
+  dounderline
+} bind def
+
+/UL {
+  /ul exch store
+} bind def
+
+% Draw a box of WIDTH wrt current font
+% width --
+/dobox {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    stroke
+  grestore
+} bind def
+
+/BX {
+  /bx exch store
+} bind def
+
+% Box a string
+% string --
+/doboxstring {
+  stringwidth pop
+  dobox
+} bind def
+
+%
+% ------------- Color routines ---------------
+%
+/FG /setrgbcolor load def
+
+% Draw the background
+% width --
+/dobackground {
+  currentpoint
+  gsave
+    newpath
+    moveto
+    0 currentfont /Descent get currentfontsize mul rmoveto
+    dup 0 rlineto
+    0 currentfont /FontHeight get currentfontsize mul rlineto
+    neg 0 rlineto
+    closepath
+    bgcolor aload pop setrgbcolor
+    fill
+  grestore
+} bind def
+
+% Draw bg for a string
+% string --
+/dobackgroundstring {
+  stringwidth pop
+  dobackground
+} bind def
+
+
+/BG {
+  dup /bg exch store
+  { mark 4 1 roll ] /bgcolor exch store } if
+} bind def
+
+
+/Show {
+  bg { dup dobackgroundstring } if
+  ul { dup dounderlinestring } if
+  bx { dup doboxstring } if
+  show
+} bind def
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T {
+  cw mul x0 add
+  bg { dup currentpoint pop sub dobackground } if
+  ul { dup currentpoint pop sub dounderline } if
+  bx { dup currentpoint pop sub dobox } if
+  y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n {
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+/S {
+  Show
+} bind def
+
+%%BeginResource: procset a2ps-a2ps-hdr 2.0 2
+%%Copyright: (c) 1988, 89, 90, 91, 92, 93 Miguel Santana
+%%Copyright: (c) 1995, 96, 97, 98 Akim Demaille, Miguel Santana
+% Function title: prints page header.
+% <ct> <rt> <lt> are passed as argument
+/title { 
+  % 1. Draw the background
+  x v get y v get moveto
+  gsave
+    0 th 2 div neg rmoveto 
+    th setlinewidth
+    0.95 setgray
+    pw 0 rlineto stroke
+  grestore
+  % 2. Border it
+  gsave
+    0.7 setlinewidth
+    pw 0 rlineto
+    0 th neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+  % stk: ct rt lt
+  x v get y v get th sub 1 add moveto
+%%IncludeResource: font Helvetica
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  % 3. The left title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    fnfs 0.8 mul hm rmoveto
+    show			% left title
+  grestore
+  exch
+  % stk: ct ltw rt
+  % 4. the right title
+  gsave
+    dup stringwidth pop fnfs 0.8 mul add exch % leave space took on stack
+    dup
+    pw exch stringwidth pop fnfs 0.8 mul add sub
+    hm
+    rmoveto
+    show			% right title
+  grestore
+  % stk: ct ltw rtw
+  % 5. the center title
+  gsave
+    pw 3 1 roll
+    % stk: ct pw ltw rtw
+    3 copy 
+    % Move to the center of the left room
+    sub add 2 div hm rmoveto
+    % What is the available space in here?
+    add sub fnfs 0.8 mul sub fnfs 0.8 mul sub
+    % stk: ct space_left
+%%IncludeResource: font Helvetica-Bold
+  fHelvetica-Bold fnfs scalefont setfont
+    cfshow
+  grestore
+} bind def
+
+% Function border: prints virtual page border
+/border { %def
+  gsave				% print four sides
+    0 setgray
+    x v get y v get moveto
+    0.7 setlinewidth		% of the square
+    pw 0 rlineto
+    0 ph neg rlineto
+    pw neg 0 rlineto
+    closepath stroke
+  grestore
+} bind def
+
+% Function water: prints a water mark in background
+/water { %def
+  gsave
+    scx scy moveto rotate
+%%IncludeResource: font Times-Bold
+  fTimes-Bold 100 scalefont setfont
+    .97 setgray
+    dup stringwidth pop 2 div neg -50 rmoveto
+    show
+  grestore
+} bind def
+
+% Function rhead: prints the right header
+/rhead {  %def
+  lx ly moveto
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  l-show
+} bind def
+
+% Function footer (cf rf lf -> -)
+/footer {
+  fHelvetica fnfs 0.8 mul scalefont setfont
+  dx dy moveto
+  show
+
+  snx sny moveto
+  l-show
+  
+  fnx fny moveto
+  c-show
+} bind def
+%%EndResource
+%%BeginResource: procset a2ps-black+white-Prolog 2.0 1
+
+% Function T(ab), jumps to the n-th tabulation in the current line
+/T { 
+  cw mul x0 add y0 moveto
+} bind def
+
+% Function n: move to the next line
+/n { %def
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+} bind def
+
+% Function N: show and move to the next line
+/N {
+  Show
+  /y0 y0 bfs sub store
+  x0 y0 moveto
+}  bind def
+
+/S {
+  Show
+} bind def
+
+/p {
+  false UL
+  false BX
+  fCourier bfs scalefont setfont
+  Show
+} bind def
+
+/sy {
+  false UL
+  false BX
+  fSymbol bfs scalefont setfont
+  Show
+} bind def
+
+/k {
+  false UL
+  false BX
+  fCourier-Oblique bfs scalefont setfont
+  Show
+} bind def
+
+/K {
+  false UL
+  false BX
+  fCourier-Bold bfs scalefont setfont
+  Show
+} bind def
+
+/c {
+  false UL
+  false BX
+  fCourier-Oblique bfs scalefont setfont
+  Show
+} bind def
+
+/C {
+  false UL
+  false BX
+  fCourier-BoldOblique bfs scalefont setfont
+  Show 
+} bind def
+
+/l {
+  false UL
+  false BX
+  fHelvetica bfs scalefont setfont
+  Show
+} bind def
+
+/L {
+  false UL
+  false BX
+  fHelvetica-Bold bfs scalefont setfont
+  Show 
+} bind def
+
+/str{
+  false UL
+  false BX
+  fTimes-Roman bfs scalefont setfont
+  Show
+} bind def
+
+/e{
+  false UL
+  true BX
+  fHelvetica-Bold bfs scalefont setfont
+  Show
+} bind def
+
+%%EndResource
+%%EndProlog
+%%BeginSetup
+%%IncludeResource: font Courier
+%%IncludeResource: font Courier-Oblique
+%%IncludeResource: font Courier-Bold
+%%IncludeResource: font Times-Roman
+%%IncludeResource: font Symbol
+%%IncludeResource: font Courier-BoldOblique
+%%BeginResource: encoding ISO-8859-1Encoding
+/ISO-8859-1Encoding [
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclam /quotedbl /numbersign /dollar /percent /ampersand /quoteright 
+/parenleft /parenright /asterisk /plus /comma /minus /period /slash 
+/zero /one /two /three /four /five /six /seven 
+/eight /nine /colon /semicolon /less /equal /greater /question 
+/at /A /B /C /D /E /F /G 
+/H /I /J /K /L /M /N /O 
+/P /Q /R /S /T /U /V /W 
+/X /Y /Z /bracketleft /backslash /bracketright /asciicircum /underscore 
+/quoteleft /a /b /c /d /e /f /g 
+/h /i /j /k /l /m /n /o 
+/p /q /r /s /t /u /v /w 
+/x /y /z /braceleft /bar /braceright /asciitilde /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef /.notdef 
+/space /exclamdown /cent /sterling /currency /yen /brokenbar /section 
+/dieresis /copyright /ordfeminine /guillemotleft /logicalnot /hyphen /registered /macron 
+/degree /plusminus /twosuperior /threesuperior /acute /mu /paragraph /bullet 
+/cedilla /onesuperior /ordmasculine /guillemotright /onequarter /onehalf /threequarters /questiondown 
+/Agrave /Aacute /Acircumflex /Atilde /Adieresis /Aring /AE /Ccedilla 
+/Egrave /Eacute /Ecircumflex /Edieresis /Igrave /Iacute /Icircumflex /Idieresis 
+/Eth /Ntilde /Ograve /Oacute /Ocircumflex /Otilde /Odieresis /multiply 
+/Oslash /Ugrave /Uacute /Ucircumflex /Udieresis /Yacute /Thorn /germandbls 
+/agrave /aacute /acircumflex /atilde /adieresis /aring /ae /ccedilla 
+/egrave /eacute /ecircumflex /edieresis /igrave /iacute /icircumflex /idieresis 
+/eth /ntilde /ograve /oacute /ocircumflex /otilde /odieresis /divide 
+/oslash /ugrave /uacute /ucircumflex /udieresis /yacute /thorn /ydieresis 
+] def
+%%EndResource
+% Initialize page description variables.
+/sh 595 def
+/sw 842 def
+/llx 24 def
+/urx 818 def
+/ury 571 def
+/lly 24 def
+/#copies 1 def
+/th 15.000000 def
+/fnfs 11 def
+/bfs 8.005733 def
+/cw 4.803440 def
+
+% Dictionary for ISO-8859-1 support
+/iso1dict 8 dict begin
+  /fCourier ISO-8859-1Encoding /Courier reencode_font
+  /fCourier-Bold ISO-8859-1Encoding /Courier-Bold reencode_font
+  /fCourier-BoldOblique ISO-8859-1Encoding /Courier-BoldOblique reencode_font
+  /fCourier-Oblique ISO-8859-1Encoding /Courier-Oblique reencode_font
+  /fHelvetica ISO-8859-1Encoding /Helvetica reencode_font
+  /fHelvetica-Bold ISO-8859-1Encoding /Helvetica-Bold reencode_font
+  /fTimes-Bold ISO-8859-1Encoding /Times-Bold reencode_font
+  /fTimes-Roman ISO-8859-1Encoding /Times-Roman reencode_font
+currentdict end def
+/bgcolor [ 0 0 0 ] def
+/bg false def
+/ul false def
+/bx false def
+% The font for line numbering
+/f# /Helvetica findfont bfs .6 mul scalefont def
+/fSymbol /Symbol findfont def
+/hm fnfs 0.25 mul def
+/pw
+   cw 81.400000 mul
+def
+/ph
+   501.959430 th add
+def
+/pmw urx llx sub pw 2 mul sub 1 div def
+/pmh 0 def
+/v 0 def
+/x [
+  0
+  dup pmw add pw add
+] def
+/y [
+  pmh ph add 0 mul ph add
+  dup
+] def
+/scx sw 2 div def
+/scy sh 2 div def
+/snx urx def
+/sny lly 2 add def
+/dx llx def
+/dy sny def
+/fnx scx def
+/fny dy def
+/lx snx def
+/ly ury fnfs 0.8 mul sub def
+/sx 0 def
+/tab 8 def
+/x0 0 def
+/y0 0 def
+%%EndSetup
+
+%%Page: (1-2) 1
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(import) K
+( javax.swing.JOptionPane;) p n
+(public) K
+( ) p
+(class) K
+( ) p
+(AssEx1) L
+( {) p n
+() S 8 T () S
+(/*Single lined style in main removes unnecessary pointers which would ex) c n
+(ist in main method only to pass objects to ultimately the GUI.) N
+() S 8 T ( *Obtaining name and balance by calling methods with String and double r) N
+(eturns respectively directly in the Customer Account constructor) N
+() S 8 T ( *saves use of two unneeded name and balance pointers in the main.) N
+() S 8 T ( *Likewise, creating the customer account within the constructor of the ) N
+(GUI saves on a redundant pointer to the Customer Account object,) N
+() S 8 T ( *as this object is only accessed in the LWMGUI class, and its only purp) N
+(ose in the main is to be passed to the GUI, thus a pointer within the GUI) N
+() S 8 T ( *is sufficient, and one here would be redundant */) N
+() p 8 T () S
+(public) K
+( ) p
+(static) K
+( ) p
+(void) k
+( main\(String[] args\) {) p n
+() S 8 T () S
+(new) K
+( LWMGUI\() p
+(new) K
+( CustomerAccount\(promptName\(\), promptBalance\(\)\)\);) p n
+() S 8 T (}) N
+() S 8 T () N
+() S 8 T () S
+(public) K
+( ) p
+(static) K
+( String promptName\(\) {) p n
+() S 8 T () S 16 T () S
+(//prompts user for name with dialog box.) c n
+() p 8 T () S 16 T () S
+(//handles quit options for first dialog box as per specification) c n
+() p 8 T () S 16 T (String name = JOptionPane.showInputDialog\(") S
+(Please enter the name on the ac) str n
+(count:) S
+("\);) p n
+() S 8 T () S 16 T () S
+(if) K
+( \(name.equals\(JOptionPane.CLOSED_OPTION\) || name.equals\(JOptio) p n
+(nPane.CANCEL_OPTION\) || name.equals\(""\)\) {) N
+() S 8 T () S 16 T () S 24 T (System.exit\(0\);) N
+() S 8 T () S 16 T () S 24 T () S
+(return) K
+( ) p
+(null) k
+(;) p n
+() S 8 T () S 16 T (}) N
+() S 8 T () S 16 T () S
+(return) K
+( name; ) p
+(//return name ends method, gives name String as res) c n
+(ult of method.) N
+() p 8 T (}) N
+() S 8 T () N
+() S 8 T () S
+(public) K
+( ) p
+(static) K
+( ) p
+(double) k
+( promptBalance\(\) {) p n
+() S 8 T () S 16 T () S
+(//Prompts user for balance with dialog box.) c n
+() p 8 T () S 16 T () S
+(//handles quit options for second dialog box as per specificatio) c n
+(n.) N
+() p 8 T () S 16 T () N
+() S 8 T () S 16 T () S
+(double) k
+( balance;) p n
+() S 8 T () S 16 T () S
+(for) K
+(\(;;\) {) p
+(//Infinite for loop will continue to prompt user until ) c n
+(a valid input, or quit, is received.) N
+() p 8 T () S 16 T () S 24 T () S
+(//showInputDialog returns a String, double value must be) c n
+( extracted from this input, use parseDouble.) N
+() p 8 T () S 16 T () S 24 T (String balinput = JOptionPane.showInputDialog\(") S
+(Enter inital c) str n
+(redit balance of account: ) S
+("\);) p n
+() S 8 T () S 16 T () S 24 T () S
+(if) K
+( \(balinput.equals\(JOptionPane.CLOSED_OPTION\) || balinp) p n
+(ut.equals\(JOptionPane.CANCEL_OPTION\)\) {) N
+() S 8 T () S 16 T () S 24 T () S 32 T (System.exit\(0\);) N
+() S 8 T () S 16 T () S 24 T () S 32 T () S
+(return) K
+( 0;) p n
+() S 8 T () S 16 T () S 24 T (}) N
+() S 8 T () S 16 T () S 24 T () S
+(try) K
+( {) p n
+() S 8 T () S 16 T () S 24 T () S 32 T (balance = Double.parseDouble\(balinput\);) N
+() S 8 T () S 16 T () S 24 T () S 32 T () S
+(//Customer enters initial value as credit +ve, n) c n
+(eed to invert for specified debit +ve system.) N
+() p 8 T () S 16 T () S 24 T () S 32 T () S
+(//The IF is just to prevent -0, which is bad mat) c n
+(hs.) N
+() p 8 T () S 16 T () S 24 T () S 32 T () S
+(if) K
+( \(balance != 0\) {) p n
+() S 8 T () S 16 T () S 24 T () S 32 T () S 40 T (balance *= -1;) N
+() S 8 T () S 16 T () S 24 T () S 32 T (}) N
+() S 8 T () S 16 T () S 24 T () S 32 T () S
+(return) K
+( balance;) p
+(//return ends the method and brea) c n
+(ks infinite loop, so break; statement redundant.) N
+() p 8 T () S 16 T () S 24 T () S 32 T () S
+(//gives value of balance as result of method.) c n
+() p 8 T () S 16 T () S 24 T (}) N
+() S 8 T () S 16 T () S 24 T () S
+(catch) K
+( \(NumberFormatException nfx\) {) p
+(//message displayed w) c n
+(hen an invalid input received, will repeat indefinitely until input valid.) N
+(AssEx1.java) (Page 1/2) (Nov 04, 17 19:00) title
+border
+/v 1 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p 8 T () S 16 T () S 24 T () S 32 T (JOptionPane.showMessageDialog\() S
+(null) k
+(, ") p
+(Enter a double v) str n
+(alue) S
+(", ") p
+(Error Report) str
+(", JOptionPane.ERROR_MESSAGE\);) p n
+() S 8 T () S 16 T () S 24 T (}) N
+() S 8 T () S 16 T (}) N
+() S 8 T (}) N
+() N
+(}) N
+(AssEx1.java) (Page 2/2) (Nov 04, 17 19:00) title
+border
+grestore
+(Printed by Unknown User) rhead
+(AssEx1.java) (1/5) (Saturday November 04, 2017) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (1,1) 2
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(public) K
+( ) p
+(class) K
+( ) p
+(CustomerAccount) L
+( {) p n
+() S 8 T () S
+(/* The CustomerAccount class contains the constructor, methods to return) c n
+( instance variables) N
+() S 8 T ( * and handles balance updating in both sales and returns.) N
+() S 8 T ( * Declaration of name and balance instance variables. ) N
+() S 8 T ( * serviceCharge is final as value not expected to change during operati) N
+(on,) N
+() S 8 T ( * declared here for ease of later alteration.*/) N
+() p 8 T () N
+() S 8 T () S
+(private) K
+( ) p
+(final) K
+( ) p
+(double) k
+( serviceCharge = 0.8; ) p
+(//20% service charge on return) c n
+(s) N
+() p 8 T () S
+(private) K
+( String name;) p n
+() S 8 T () S
+(private) K
+( ) p
+(double) k
+( balance;) p n
+() N
+() S 8 T () S
+(public) K
+( CustomerAccount\(String name, ) p
+(double) k
+( balance\) { ) p n
+() S 8 T () S 16 T () S
+(//Constructor initialises instance variables with the values pas) c n
+(sed into method.) N
+() p 8 T () S 16 T (this.name = name;) N
+() S 8 T () S 16 T (this.balance = balance;) N
+() S 8 T (}) N
+() S 8 T () N
+() S 8 T () S
+(public) K
+( String getName\(\) {) p
+(//Accessor method for Customer Name) c n
+() p 8 T () S 16 T () S
+(return) K
+( name;) p n
+() S 8 T (}) N
+() N
+() S 8 T () S
+(public) K
+( ) p
+(double) k
+( getBalance\(\) {) p
+(//Accessor method for Account Balance) c n
+() p 8 T () S 16 T () S
+(return) K
+( balance;) p n
+() S 8 T (}) N
+() N
+() N
+() S 8 T () S
+(public) K
+( ) p
+(double) k
+( updateBalanceSale\(Wine wine\) { ) p
+(//Processes a sale based on) c n
+( wine object passed by LWMGUI class) N
+() p 8 T () S 16 T () S
+(//updates the instance balance but also returns the salePrice fo) c n
+(r purposes of user feedback on infoPanel.) N
+() p 8 T () S 16 T () S
+(double) k
+( salePrice = wine.getBottleCost\(\)*wine.getQuantity\(\);) p n
+() S 8 T () S 16 T (this.balance += salePrice;) N
+() S 8 T () S 16 T () S
+(return) K
+( salePrice;) p n
+() S 8 T (}) N
+() N
+() S 8 T () S
+(public) K
+( ) p
+(double) k
+( updateBalanceReturn\(Wine wine\) {) p
+(//Processes a return based) c n
+( on wine object passed by LWMGUI class) N
+() p 8 T () S 16 T () S
+(//updates the instance balance but also returns the returnPrice ) c n
+(for purposes of user feedback on infoPanel.) N
+() p 8 T () S 16 T () S
+(double) k
+( returnPrice = wine.getBottleCost\(\)*wine.getQuantity\(\)*ser) p n
+(viceCharge;) N
+() S 8 T () S 16 T (this.balance -= returnPrice;) N
+() S 8 T () S 16 T () S
+(return) K
+( returnPrice;) p n
+() S 8 T (}) N
+() S 8 T () N
+(}) N
+(CustomerAccount.java) (Page 1/1) (Nov 04, 17 18:59) title
+border
+/v 1 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(import) K
+( java.awt.*;) p n
+(import) K
+( java.awt.event.*;) p n
+(import) K
+( javax.swing.*;) p n
+(public) K
+( ) p
+(class) K
+( ) p
+(LWMGUI) L
+( ) p
+(implements) K
+( ActionListener {) p n
+() S 8 T () S
+(/* LWMGUI method creates the GUI of the main window, not initial dialog ) c n
+(boxes - handled by AssEx1 class.) N
+() S 8 T ( *  Handles events for sale or return button presses. Transaction calcul) N
+(ations in CustomerAccount class.) N
+() S 8 T ( *  CustomerAccount object passed from AssEx1 in this class's constructo) N
+(r.) N
+() S 8 T ( *  Wine object created in object, passed to CustomerAccount in actionPe) N
+(rformed for both sale and return.) N
+() S 8 T ( *  Class has a constructor which creates GUI, adds starting balance.) N
+() S 8 T ( *  Three methods set'X'Panel create the three main JPanels and add thei) N
+(r constituent parts. Done for ease of problem solving and readability.) N
+() S 8 T ( *  Event handling method processes sale or return buttons being pressed) N
+() S 8 T ( *  clearInputs and update methods involved with processing inputs.*/) N
+() p n
+() S 8 T () S
+(//Declare and initialise GUI elements which change in program operation,) c n
+( ie. need to be passed between methods.) N
+() p 8 T () S
+(private) K
+() p 16 T (JFrame backFrame = ) S
+(new) K
+( JFrame\(\); ) p
+(//backFrame ) c n
+() p 8 T () S
+(private) K
+() p 16 T (JButton returnButton = ) S
+(new) K
+( JButton\(") p
+(Process Return) str
+("\);) p n
+() S 8 T () S
+(private) K
+() p 16 T (JButton saleButton = ) S
+(new) K
+( JButton\(") p
+(Process Sale) str
+("\);) p n
+() N
+() S 8 T () S
+(private) K
+() p 16 T (TextField wineInput = ) S
+(new) K
+( TextField\(\);) p n
+() S 8 T () S
+(private) K
+() p 16 T (TextField quantityInput = ) S
+(new) K
+( TextField\(\);) p n
+() S 8 T () S
+(private) K
+() p 16 T (TextField priceInput = ) S
+(new) K
+( TextField\(\);) p 56 T () N
+() N
+() S 8 T () S
+(private) K
+() p 16 T (TextField lastWine = ) S
+(new) K
+( TextField\(\);) p n
+() S 8 T () S
+(private) K
+() p 16 T (TextField lastCost = ) S
+(new) K
+( TextField\(\);) p n
+() S 8 T () S
+(private) K
+() p 16 T (TextField balanceRemaining = ) S
+(new) K
+( TextField\(\);) p 64 T () N
+() N
+() S 8 T () S
+(//Declare pointers to the Customer Account and Wine objects initialised ) c n
+(later on.) N
+() p 8 T () S
+(public) K
+( CustomerAccount user;) p n
+() S 8 T () S
+(public) K
+( Wine wine;) p n
+() N
+() N
+() S 8 T () S
+(public) K
+( LWMGUI\(CustomerAccount user\) { ) p
+(//Constructor Method) c n
+() p n
+() S 8 T () S 16 T (this.user = user; ) S
+(//Initialise the customer account as the one p) c n
+(assed from main) N
+() p 8 T () S 16 T (String username = this.user.getName\(\); ) S
+(//access username) c n
+() p 8 T () S 16 T (backFrame.setSize\(640, 200\);) N
+() S 8 T () S 16 T (backFrame.setResizable\() S
+(false) k
+(\);) p n
+() S 8 T () S 16 T (backFrame.setTitle\(") S
+(Lilybank Wine Merchants: ) str
+("+username\); ) p
+(//put userna) c n
+(me into title bar.) N
+() p 8 T () S 16 T (backFrame.setDefaultCloseOperation\(JFrame.EXIT_ON_CLOSE\);) N
+() N
+() S 8 T () S 16 T () S
+(/*  Instructions in these methods could easily be in constructor) c n
+(.) N
+() S 8 T () S 16 T ( *  Parcelled off for ease of error finding in creating GUI.) N
+() S 8 T () S 16 T ( *  Helps with readability of how GUI is constructed also.  */) N
+() p 8 T () S 16 T (setInputPanel\(\);) N
+() S 8 T () S 16 T (setButtonPanel\(\);) N
+() S 8 T () S 16 T (setInfoPanel\(\);) N
+() N
+() S 8 T () S 16 T (balanceRemaining.setText\(formatBalance\(\)\);  ) S
+(//Displays initial b) c n
+(alance  immediately) N
+() p 8 T () S 16 T (backFrame.setVisible\() S
+(true) k
+(\);) p n
+() S 8 T (}) N
+() N
+(LWMGUI.java) (Page 1/5) (Nov 04, 17 19:00) title
+border
+grestore
+(Printed by Unknown User) rhead
+(CustomerAccount.java, LWMGUI.java) (2/5) (Saturday November 04, 2017) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (2-3) 3
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p n
+() S 8 T (@Override) N
+() S 8 T () S
+(public) K
+( ) p
+(void) k
+( actionPerformed\(ActionEvent e\) { ) p
+(//handles pressing of the s) c n
+(ale and return buttons.) N
+() p n
+() S 8 T () S 16 T () S
+(if) K
+( \(this.checkInput\(\)\) {) p
+(//checkInput returns true if all inputs ) c n
+(valid. Passes inputs to new wine object.) N
+() p n
+() S 8 T () S 16 T () S 24 T () S
+(if) K
+( \(e.getSource\(\) == saleButton\) {) p
+(//procedure for sale b) c n
+(utton pressed) N
+() p 8 T () S 16 T () S 24 T () S 32 T (lastCost.setText\(String.format\(") S
+(%9.02f) str
+(", this.use) p n
+(r.updateBalanceSale\(wine\)\)\); ) N
+() S 8 T () S 16 T () S 24 T () S 32 T () S
+(/*  calling either updateBalance methods in this) c n
+( manner processes the sale/return of the wine object passed into it) N
+() S 8 T () S 16 T () S 24 T () S 32 T ( * ) S 40 T (wine object is updated prior by checkInp) N
+(ut.) N
+() S 8 T () S 16 T () S 24 T () S 32 T ( *  method also returns the total cost of that s) N
+(ale/return, which is formatted and set in the lastCost box */) N
+() p 8 T () S 16 T () S 24 T (}) N
+() S 8 T () S 16 T () S 24 T () S
+(else) K
+( ) p
+(if) K
+(\(e.getSource\(\) == returnButton\) {) p n
+() S 8 T () S 16 T () S 24 T () S 32 T (lastCost.setText\(String.format\(") S
+(%9.02f) str
+(", this.use) p n
+(r.updateBalanceReturn\(wine\)\)\);) N
+() N
+() S 8 T () S 16 T () S 24 T (}) N
+() S 8 T () S 16 T () S 24 T (purchaseFeedback\(\); ) N
+() S 8 T () S 16 T () S 24 T () S
+(/* Irrespective of which button is pressed, wine name an) c n
+(d current balance \(latter handled by CustomerAccount class\).) N
+() S 8 T () S 16 T () S 24 T ( * Only done if input determined to be valid, therefore ) N
+(within bounds of if statement on checkInput.*/) N
+() p 8 T () S 16 T (}) N
+() S 8 T () S 16 T (this.clearInputs\(\); ) S
+(//clear inputs irrespective of which of the ) c n
+(two buttons is pressed and whether input is valid or not) N
+() p n
+() S 8 T (}) N
+() N
+() S 8 T () S
+(private) K
+( ) p
+(void) k
+( setButtonPanel\(\) { ) p
+(//Sets up the layout of central panel on) c n
+( window, which contains the two buttons) N
+() p 8 T () S 16 T (JPanel buttonPanel = ) S
+(new) K
+( JPanel\(\);) p n
+() S 8 T () S 16 T (returnButton.setSize\(10, 10\);) N
+() S 8 T () S 16 T (saleButton.setSize\(10, 10\);) N
+() S 8 T () S 16 T (returnButton.addActionListener\() S
+(this) k
+(\); ) p n
+() S 8 T () S 16 T (saleButton.addActionListener\() S
+(this) k
+(\);) p n
+() S 8 T () S 16 T (buttonPanel.setLayout\() S
+(new) K
+( GridBagLayout\(\)\);) p n
+() S 8 T () S 16 T (buttonPanel.add\(saleButton\);) N
+() S 8 T () S 16 T (buttonPanel.add\(returnButton\);) N
+() S 8 T () S 16 T (backFrame.add\(buttonPanel, BorderLayout.CENTER\);) N
+() S 8 T (}) N
+() S 8 T () S
+(private) K
+( ) p
+(void) k
+( setInputPanel\(\) { ) p
+(//Sets up the layout of top panel, which ) c n
+(contains the three input boxes and their labels) N
+() p 8 T () S 16 T (JPanel inputPanel = ) S
+(new) K
+( JPanel\(\);) p n
+() S 8 T () S 16 T (JLabel wineLabel = ) S
+(new) K
+( JLabel\(") p
+(Wine Name: ) str
+("\);) p n
+() S 8 T () S 16 T (wineLabel.setHorizontalAlignment\(SwingConstants.RIGHT\);) N
+() S 8 T () S 16 T (JLabel quantityLabel = ) S
+(new) K
+( JLabel\(") p
+(Quantity: ) str
+("\);) p n
+() S 8 T () S 16 T (quantityLabel.setHorizontalAlignment\(SwingConstants.RIGHT\);) N
+() S 8 T () S 16 T (JLabel priceLabel = ) S
+(new) K
+( JLabel\(") p
+(Price: \302\243) str
+("\);) p n
+() S 8 T () S 16 T (priceLabel.setHorizontalAlignment\(SwingConstants.RIGHT\);) N
+() N
+() S 8 T () S 16 T (inputPanel.setLayout\() S
+(new) K
+( GridLayout\(1, 6, 0, 0\)\);) p n
+() S 8 T () S 16 T (inputPanel.add\(wineLabel\);) N
+() S 8 T () S 16 T (inputPanel.add\(wineInput\);) N
+() S 8 T () S 16 T (inputPanel.add\(quantityLabel\);) N
+() S 8 T () S 16 T (inputPanel.add\(quantityInput\);) N
+(LWMGUI.java) (Page 2/5) (Nov 04, 17 19:00) title
+border
+/v 1 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+() p 8 T () S 16 T (inputPanel.add\(priceLabel\);) N
+() S 8 T () S 16 T (inputPanel.add\(priceInput\);) N
+() S 8 T () S 16 T (backFrame.add\(inputPanel, BorderLayout.NORTH\);) N
+() S 8 T (}) N
+() S 8 T () S
+(private) K
+( ) p
+(void) k
+( setInfoPanel\(\) {) p
+(//Sets up the layout of bottom panel, which) c n
+( contains the user feedback on balance and last purchase.) N
+() p 8 T () S 16 T (JPanel infoPanel = ) S
+(new) K
+( JPanel\(\);) p n
+() S 8 T () S 16 T (JLabel lastWineLabel = ) S
+(new) K
+( JLabel\(") p
+(Last Wine Purchased: ) str
+("\);) p n
+() S 8 T () S 16 T (lastWineLabel.setHorizontalAlignment\(SwingConstants.RIGHT\);) N
+() S 8 T () S 16 T (JLabel lastCostLabel = ) S
+(new) K
+( JLabel\(") p
+(Last Purchase Cost: \302\243) str
+("\);) p n
+() S 8 T () S 16 T (lastCostLabel.setHorizontalAlignment\(SwingConstants.RIGHT\);) N
+() S 8 T () S 16 T (JLabel balanceLabel = ) S
+(new) K
+( JLabel\(") p
+(Balance\(Debit +ve\): \302\243) str
+("\);) p n
+() S 8 T () S 16 T (balanceLabel.setHorizontalAlignment\(SwingConstants.RIGHT\);) N
+() N
+() S 8 T () S 16 T (JPanel top = ) S
+(new) K
+( JPanel\(\);) p n
+() S 8 T () S 16 T (top.setLayout\() S
+(new) K
+( GridLayout\(1,2, 0, 0\)\);) p n
+() S 8 T () S 16 T (JPanel bottom = ) S
+(new) K
+( JPanel\(\);) p n
+() S 8 T () S 16 T (bottom.setLayout\() S
+(new) K
+( GridLayout\(1,4, 0, 0\)\);) p n
+() S 8 T () S 16 T (JPanel middle = ) S
+(new) K
+( JPanel\(\);) p n
+() S 8 T () S 16 T (middle.setSize\(0, 5\);) N
+() S 8 T () S 16 T (GridBagLayout infoLayout = ) S
+(new) K
+( GridBagLayout\(\);) p n
+() S 8 T () S 16 T (GridBagConstraints con = ) S
+(new) K
+( GridBagConstraints\(\);) p n
+() S 8 T () S 16 T (infoPanel.setLayout\(infoLayout\);) N
+() N
+() S 8 T () S 16 T (top.add\(lastWineLabel\);) N
+() S 8 T () S 16 T (top.add\(lastWine\);) N
+() S 8 T () S 16 T (lastWine.setEditable\() S
+(false) k
+(\);) p n
+() S 8 T () S 16 T (lastWine.setBackground\(Color.lightGray\);) N
+() S 8 T () S 16 T (bottom.add\(lastCostLabel\);) N
+() S 8 T () S 16 T (bottom.add\(lastCost\);) N
+() S 8 T () S 16 T (lastCost.setEditable\() S
+(false) k
+(\);) p n
+() S 8 T () S 16 T (lastCost.setBackground\(Color.lightGray\);) N
+() S 8 T () S 16 T (bottom.add\(balanceLabel\);) N
+() S 8 T () S 16 T (bottom.add\(balanceRemaining\);) N
+() S 8 T () S 16 T (balanceRemaining.setEditable\() S
+(false) k
+(\);) p n
+() S 8 T () S 16 T (balanceRemaining.setBackground\(Color.lightGray\);) N
+() S 8 T () S 16 T (con.gridx = 0;) N
+() S 8 T () S 16 T (con.gridy = 0;) N
+() S 8 T () S 16 T (infoLayout.setConstraints\(top, con\);) N
+() S 8 T () S 16 T (infoPanel.add\(top\);) N
+() S 8 T () S 16 T (con.gridx = 0;) N
+() S 8 T () S 16 T (con.gridy = 1;) N
+() S 8 T () S 16 T (infoLayout.setConstraints\(middle, con\);) N
+() S 8 T () S 16 T (infoPanel.add\(middle\);) N
+() S 8 T () S 16 T (con.gridx = 0;) N
+() S 8 T () S 16 T (con.gridy = 2;) N
+() S 8 T () S 16 T (infoLayout.setConstraints\(bottom, con\);) N
+() S 8 T () S 16 T (infoPanel.add\(bottom\);) N
+() S 8 T () S 16 T (backFrame.add\(infoPanel, BorderLayout.SOUTH\);) N
+() N
+() S 8 T (}) N
+() N
+() S 8 T () S
+(private) K
+( ) p
+(boolean) k
+( checkInput\(\) {) p n
+() S 8 T () S 16 T () S
+(/* Method takes the inputs from each text field.) c n
+() S 8 T () S 16 T ( * It checks the validity as per the specification of all three) N
+() S 8 T () S 16 T ( * If all three are valid it creates a creates a new wine object) N
+( with the given input parameters) N
+() S 8 T () S 16 T ( * directs the class global wine pointer to this new wine, so th) N
+(at it maybe used for other methods.) N
+() S 8 T () S 16 T ( * This is fine as program only ever needs to keep track of a si) N
+(ngle wine at a time, as it can only process sales item by item.) N
+() S 8 T () S 16 T ( * Method returns a boolean variable to tell actionPerfomed meth) N
+(LWMGUI.java) (Page 3/5) (Nov 04, 17 19:00) title
+border
+grestore
+(Printed by Unknown User) rhead
+(LWMGUI.java) (3/5) (Saturday November 04, 2017) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (4-5) 4
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(od if inputs were valid at time of button press. ) c n
+() S 8 T () S 16 T ( * True only if all inputs are valid. */) N
+() p n
+() S 8 T () S 16 T () S
+(int) k
+( quantity = 0;) p n
+() S 8 T () S 16 T () S
+(double) k
+( bottleCost = 0;) p n
+() S 8 T () S 16 T (String name = wineInput.getText\(\);) N
+() S 8 T () S 16 T () S
+(if) K
+( \(name.equals\(""\)\) {) p
+(//Only criteria on name is to not be empty) c n
+(.) N
+() p 8 T () S 16 T () S 24 T (JOptionPane.showMessageDialog\() S
+(null) k
+(, ") p
+(Require a Wine Name input) str
+() p n
+(",") S
+(Error Message) str
+(", JOptionPane.ERROR_MESSAGE\);) p n
+() S 8 T () S 16 T () S 24 T () S
+(return) K
+( ) p
+(false) k
+(;) p n
+() S 8 T () S 16 T (}) N
+() S 8 T () S 16 T () S
+(try) K
+( {) p n
+() S 8 T () S 16 T () S 24 T (quantity = Integer.parseInt\(quantityInput.getText\(\)\);) N
+() S 8 T () S 16 T (}) N
+() S 8 T () S 16 T () S
+(catch) K
+( \(NumberFormatException nfx\) {) p
+(//stops the method here if qu) c n
+(antity not an integer, gives according error message) N
+() p 8 T () S 16 T () S 24 T (JOptionPane.showMessageDialog\() S
+(null) k
+(, ") p
+(Require an integer value for) str n
+( Quantity input) S
+(", ") p
+(Error Message) str
+(", JOptionPane.ERROR_MESSAGE\);) p n
+() S 8 T () S 16 T () S 24 T () S
+(return) K
+( ) p
+(false) k
+(;) p n
+() S 8 T () S 16 T (}) N
+() S 8 T () S 16 T () S
+(try) K
+( {) p n
+() S 8 T () S 16 T () S 24 T (bottleCost = Double.parseDouble\(priceInput.getText\(\)\);) N
+() S 8 T () S 16 T (}) N
+() S 8 T () S 16 T () S
+(catch) K
+( \(NumberFormatException nfx\) {) p
+(//stops method here if price ) c n
+(not a double, gives according error message.) N
+() p 8 T () S 16 T () S 24 T (JOptionPane.showMessageDialog\() S
+(null) k
+(, ") p
+(Require a valid Price input) str
+(") p n
+(, ") S
+(Error Message) str
+(", JOptionPane.ERROR_MESSAGE\);) p n
+() S 8 T () S 16 T () S 24 T () S
+(return) K
+( ) p
+(false) k
+(;) p n
+() S 8 T () S 16 T (}) N
+() N
+() N
+() S 8 T () S 16 T () S
+(if) K
+( \( quantity > 0 && bottleCost > 0\) {) p n
+() S 8 T () S 16 T () S 24 T () S
+(/* Only if input types are all valid; quantity and cost ) c n
+(are positive valued, then wine object is created and method returns true) N
+() S 8 T () S 16 T () S 24 T ( * processing either a sale or return respectively in ac) N
+(tionPerformed. */) N
+() p 8 T () S 16 T () S 24 T (wine = ) S
+(new) K
+( Wine\(wineInput.getText\(\),bottleCost,quantity\)) p n
+(;) N
+() S 8 T () S 16 T () S 24 T () S
+(return) K
+( ) p
+(true) k
+(;) p n
+() S 8 T () S 16 T (}) N
+() S 8 T () S 16 T () S
+(else) K
+( { ) p
+(//Shows an error method if types are valid but negative/z) c n
+(ero entries present for quantity or cost) N
+() p 8 T () S 16 T () S 24 T (JOptionPane.showMessageDialog\() S
+(null) k
+(, ") p
+(Quantity and Price require p) str n
+(ositive valued, non-zero inputs.) S
+(", ") p
+(Error Message) str
+(", JOptionPane.ERROR_MESSAGE\);) p n
+() S 8 T () S 16 T () S 24 T () S
+(return) K
+( ) p
+(false) k
+(;) p n
+() S 8 T () S 16 T (}) N
+() S 8 T (}) N
+() N
+() S 8 T () S
+(private) K
+( ) p
+(void) k
+( clearInputs\(\) { ) p
+(//Clears the inputs ) c n
+() p 8 T () S 16 T (wineInput.setText\(") S
+( ) str
+("\);) p n
+() S 8 T () S 16 T (quantityInput.setText\(") S
+( ) str
+("\);) p n
+() S 8 T () S 16 T (priceInput.setText\(") S
+( ) str
+("\);) p n
+() S 8 T (}) N
+() N
+() S 8 T () S
+(private) K
+( ) p
+(void) k
+( purchaseFeedback\(\) {) p n
+() S 8 T () S 16 T () S
+(/* Updates text in wine name and balance remaining.) c n
+() S 8 T () S 16 T ( * Both are independent of whether sale or return processed:) N
+() S 8 T () S 16 T ( * ) S 24 T () S 32 T (wine name is not involved in calculations) N
+() S 8 T () S 16 T ( * ) S 24 T () S 32 T (balance is an instance variable of CustomerAccou) N
+(nt and can be accessed the same regardless of which transaction is processed) N
+() S 8 T () S 16 T ( * Last cost is not updated by this method as it is passed from ) N
+(LWMGUI.java) (Page 4/5) (Nov 04, 17 19:00) title
+border
+/v 1 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(the sale/return methods respectively in both cases */) c n
+() p 8 T () S 16 T (lastWine.setText\(wine.getName\(\)\);) N
+() S 8 T () S 16 T (balanceRemaining.setText\(formatBalance\(\)\);) N
+() S 8 T (}) N
+() N
+() S 8 T () S
+(public) K
+( String formatBalance\(\) {) p
+(//Formats balance display to two decimal ) c n
+(places, and negative balances as positive with CR \(credit\)) N
+() p 8 T () S 16 T () S
+(if) K
+( \(this.user.getBalance\(\) < 0\) {) p n
+() S 8 T () S 16 T () S 24 T (String output = String.format\(") S
+(%9.02f) str
+(", -this.user.getBal) p n
+(ance\(\)\)+") S
+(CR) str
+(";) p n
+() S 8 T () S 16 T () S 24 T () S
+(/*number will be negative, so invert to remove minus sig) c n
+(n and add CR. ) N
+() S 8 T () S 16 T () S 24 T ( * Inversion only part of string formatting so does not ) N
+(affect stored balance value for futher transactions.*/) N
+() p 8 T () S 16 T () S 24 T () S
+(return) K
+( output; ) p
+(//returns balance formatted as a strung) c n
+() p 8 T () S 16 T (}) N
+() S 8 T () S 16 T () S
+(else) K
+( {) p n
+() S 8 T () S 16 T () S 24 T () S
+(return) K
+( String.format\(") p
+(%9.02f) str
+(", this.user.getBalance\(\)\); ) p
+(/) c n
+(/simply format to two dp for positive \(debit\) balanaces.) N
+() p 8 T () S 16 T (}) N
+() S 8 T (}) N
+() N
+() N
+(}) N
+(LWMGUI.java) (Page 5/5) (Nov 04, 17 19:00) title
+border
+grestore
+(Printed by Unknown User) rhead
+(LWMGUI.java) (4/5) (Saturday November 04, 2017) footer
+end % of iso1dict
+pagesave restore
+showpage
+%%Page: (1) 5
+%%BeginPageSetup
+/pagesave save def
+sh 0 translate 90 rotate
+%%EndPageSetup
+iso1dict begin
+gsave
+llx lly 12 add translate
+/v 0 store
+/x0 x v get 3.362408 add sx cw mul add store
+/y0 y v get bfs th add sub store
+x0 y0 moveto
+(public) K
+( ) p
+(class) K
+( ) p
+(Wine) L
+( {) p n
+() S 8 T () S
+(//The Wine class contains the constructor for the object and methods to ) c n
+(return instance variables) N
+() p n
+() S 8 T () S
+(//Declare instance variable pointers.) c n
+() p 8 T () S
+(private) K
+( String name;) p n
+() S 8 T () S
+(private) K
+( ) p
+(double) k
+( bottleCost;) p n
+() S 8 T () S
+(private) K
+( ) p
+(int) k
+( quantity;) p n
+() N
+() S 8 T () S
+(public) K
+( Wine\(String name, ) p
+(double) k
+( bottleCost, ) p
+(int) k
+( quantity\) {) p n
+() S 8 T () S 16 T () S
+(//Constructor initialised instance variables with the values pas) c n
+(sed into it.) N
+() p 8 T () S 16 T (this.name = name;) N
+() S 8 T () S 16 T (this.bottleCost = bottleCost;) N
+() S 8 T () S 16 T (this.quantity = quantity;) N
+() S 8 T (}) N
+() N
+() S 8 T () S
+(public) K
+( String getName\(\) { ) p
+(//accessor method for wine name) c n
+() p 8 T () S 16 T () S
+(return) K
+( name;) p n
+() S 8 T (}) N
+() N
+() S 8 T () S
+(public) K
+( ) p
+(double) k
+( getBottleCost\(\) { ) p
+(//accessor method for cost per bottle) c n
+() p 8 T () S 16 T () S
+(return) K
+( bottleCost;) p n
+() S 8 T (}) N
+() N
+() S 8 T () S
+(public) K
+( ) p
+(int) k
+( getQuantity\(\) {) p
+(//accessor method for quantity) c n
+() p 8 T () S 16 T () S
+(return) K
+( quantity;) p n
+() S 8 T (}) N
+() N
+(}) N
+(Wine.java) (Page 1/1) (Nov 04, 17 19:00) title
+border
+grestore
+(Printed by Unknown User) rhead
+(Wine.java) (5/5) (Saturday November 04, 2017) footer
+end % of iso1dict
+pagesave restore
+showpage
+
+%%Trailer
+end
+%%EOF

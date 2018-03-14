@@ -1,0 +1,6 @@
+Code Game methods to handle end of rounds
+Code and implement Database
+Methods to query database
+Code methods to write to database at end of round
+Extend game object to accomodate mulitple players
+Package as a jar.

@@ -1,0 +1,83 @@
+% XeLaTeX can use any Mac OS X font. See the setromanfont command below.
+% Input to XeLaTeX is full Unicode, so Unicode characters can be typed directly into the source.
+
+% The next lines tell TeXShop to typeset with xelatex, and to open and save the source with Unicode encoding.
+
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+
+\documentclass[11pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+
+% Will Robertson's fontspec.sty can be used to simplify font choices.
+% To experiment, open /Applications/Font Book to examine the fonts provided on Mac OS X,
+% and change "Hoefler Text" to any of these choices.
+
+\usepackage{fontspec,xltxtra,xunicode}
+\defaultfontfeatures{Mapping=tex-text}
+\setromanfont[Mapping=tex-text]{Times}
+\setsansfont[Scale=MatchLowercase,Mapping=tex-text]{Gill Sans}
+\setmonofont[Scale=MatchLowercase]{Andale Mono}
+
+\title{University of Glasgow Software Team Project}
+\author{Team 12 Organisational Document}
+\date{\today}                                           
+
+\begin{document}
+\maketitle
+\subsection*{Team Members}
+Paul McHard
+
+Nicholas Ferrera
+
+Lewis Renfrew
+
+Kayleigh Chisholm
+
+Eoghan Malone
+\subsection*{Roles and Responsibilities}
+Programming tasks:
+\begin{enumerate}
+\item Core functionality - Lewis and Paul
+\item Extension to full functionality [Production Coding] - Eoghan and Nicholas
+\item Database Development - Paul and Eoghan
+\item Command Line Interface - Kayleigh and Nicholas
+\item Web Interface  - Lewis and Nicholas
+\end{enumerate}
+Other Tasks:
+\begin{enumerate}
+\item Systems Analysis and Design - Kayleigh and Paul
+\item Code Readability and Structuring - Lewis and Eoghan
+\item Documentation - Paul, Kayleigh and Eoghan
+\item Testing - all team
+\end{enumerate}
+
+Scrum Manager will be Eoghan Malone, responsible for organising sprints.
+
+Git Librarian will be Nicholas Ferrera, responsible for managing the github repository and encouraging regular commits by all team members.
+
+
+\subsection*{Authority}
+Project Manager will be Paul McHard. Decisions will be largely be made on group consensus, the project manager will have organisational responsibility and make decisions where need be.
+\subsection*{Communication}
+Team will meet twice a week on Tuesdays and Thursdays to discuss progress. Team met on Wednesday and Friday in week 1 to establish roles, responsibilities and workload distribution. 
+
+Team also makes use of an email chain and instant messaging group chat for rapid communication. 
+
+\subsection*{Information Management}
+Code will be organised and stored centrally using Git, with a Github repository hosted by the Git Librarian.
+All other documentation will be shared and stored using Google Drive.
+\subsection*{Tools}
+The following tools will be implemented:
+\begin{itemize}
+\item Eclipse
+\item Github
+\item Google Drive
+\item DB workbench
+\end{itemize}
+\end{document}  

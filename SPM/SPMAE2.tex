@@ -1,0 +1,850 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}                
+\geometry{letterpaper}                    
+\usepackage[parfill]{parskip}    
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{fontspec}
+\usepackage{xcolor}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\setmainfont{Times New Roman}
+\title{Software Project Management Assessed Exercise 2}
+\author{Paul McHard - 2085227M}
+\date{\today}
+
+\begin{document}
+\maketitle
+\subsection*{Introduction} The customer, the Computing Science Department of Gaelic University, desires to implement a system which would allow automation of delivering marks to students. It will involve input into the system by students and lecturers and will allow advisors and program directors to access information available to them. A system administrator role should also be implemented for purposes of maintenance and override control of the system. It should be noted that a \emph{scrum} development style is being employed for this project. The customer desired for development to be done by a single student developer. An iteration cycle length of 30 ideal days is being used for the purposes of this report.
+\subsection*{User Roles}
+%%%%%%%%%%%%%%%%%%%%%				USER ROLES			%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\begin{tabular}{ | m{12cm} | } 
+ \hline
+ \textbf{Student}   \\ 
+  \hline
+  \\[5pt]			
+\begin{itemize}
+\item{Frequency of Use: High}
+\item{Domain Expertise: Moderate}
+\item{Computer Expertise: Low}
+\item{Software Expertise: Moderate}
+\item{\textbf{Goals:}}
+\begin{enumerate}
+\item{Enter attending courses.}
+\item{Receive Grades}
+\item{Receive Feedback}
+\end{enumerate}
+\end{itemize} \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{12cm} | } 
+ \hline
+ \textbf{Lecturer}   \\ 
+  \hline
+  \\[5pt]
+\begin{itemize}
+\item{Frequency of Use: High}
+\item{Domain Expertise: High}
+\item{Computer Expertise: Moderate}
+\item{Software Expertise: Moderate}
+\item{\textbf{Goals:}}
+\begin{enumerate}
+\item{Upload student grades}
+\item{Produce Marksheets}
+\end{enumerate}
+\end{itemize} \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{12cm} | } 
+ \hline
+ \textbf{Advisor}   \\ 
+  \hline
+  \\[5pt]
+\begin{itemize}
+\item{Frequency of Use: Moderate}
+\item{Domain Expertise: High}
+\item{Computer Expertise: Moderate}
+\item{Software Expertise: Low}
+\item{\textbf{Goals:}}
+\begin{enumerate}
+\item{Monitor Student Progress}
+\end{enumerate}
+\end{itemize} \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{12cm} | } 
+ \hline
+ \textbf{Program Director}   \\ 
+  \hline
+  \\[5pt]
+\begin{itemize}
+\item{Frequency of Use: Low}
+\item{Domain Expertise: High}
+\item{Computer Expertise: Moderate}
+\item{Software Expertise: Moderate}
+\item{\textbf{Goals:}}
+\begin{enumerate}
+\item{Receive Mark Sheets}
+\item{Determine Student Pass/Fail}
+\end{enumerate}
+\end{itemize} \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{12cm} | } 
+ \hline
+ \textbf{System Admin}   \\ 
+  \hline
+  \\[5pt]
+\begin{itemize}
+\item{Frequency of Use: Low}
+\item{Domain Expertise: Very High}
+\item{Computer Expertise: High}
+\item{Software Expertise: High}
+\item{\textbf{Goals:}}
+\begin{enumerate}
+\item{Rectify erroneous action by other users}
+\item{Perform System Updates and Maintenance}
+\end{enumerate}
+\end{itemize} \\
+ \hline
+\end{tabular}
+\end{center}
+
+\subsection*{User Role Privileges}
+Information access privileges play a key role in the system; as such, user privileges must be clearly defined. A \emph{Student} user is lowest level, having access to their own information only. \emph{Student} can also view but not change their own grades. The next level is shared by \emph{Lecturer} and \emph{Advisor}, who have access to their own information as well as to that of the given students under their respective tutelage/guidance. Above them is the role of \emph{Program Director}, who has access to information on all \emph{Students} in the program. Finally, the \emph{System Administrator} has access to all information used and stored by all users, as they must be able to access all facets of the system for the purpose of error correction on any level.
+\newpage
+%%%%%%%%%%%%%%%%%%%%%				STORY CARDS			%%%%%%%%%%%%%%%%%%%%%%%%%%
+\paragraph*{User Story Cards}
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{All Users: Log-In  - Front} &  \textbf{All Users: Log-In - Back}  \\ 
+  \hline
+%&\\[5pt]
+As a \emph{System User}, I want to be able to log-in to the system, so that I can securely access only the information I have privilege to access in the system.
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{User} does not present valid credentials, system prompts retry}
+\item{\emph{User} fails valid login too many times in quick succession, system prevents further attempts for set period of time} 
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{User} can log in using their credentials.}
+\item{\emph{User} has access to their correct data on log-in.}
+\item{\emph{User} cannot access data of another \emph{User} on their level of privilege or above.}
+\item{\emph{Student} can see but not alter their results.}
+\item{\emph{Lecturer} can see, alter grades of their students.}
+\item{\emph{Advisor} can see the grades of their students.}
+\item{\emph{Program Director} can see, alter the grades of all students on their program.}
+\item{\emph{System Administrator} can access and change data used by any user.}
+\end{itemize} \\
+\textbf{Duration: 4 ideal days} &\\
+\textbf{Priority:}  \textcolor{red}{Must Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Student: Course Entry - Front} &  \textbf{Student: Course Entry - Back}  \\ 
+  \hline
+&\\[5pt]
+As a \emph{Student User}, I want to be able to enter my courses into the system, so that I am eligible to receive my grades.
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Student} attempts to enter course they've already entered, system alerts user.}
+\item{\emph{Student} exceeds limit on enrolled courses, system prompts user to correct.} 
+\item{\emph{Student} attempts to enter no courses, system warns user, allows user to proceed.}
+\end{enumerate} 
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Student} can enter their courses.}
+\item{\emph{Student} cannot enter their grades.}
+\item{\emph{Student} cannot enter courses for another \emph{Student User}.}
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{red}{Must Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Student: View Grades - Front} &  \textbf{Student: View Grades - Back}  \\ 
+  \hline
+&\\[5pt]
+As a \emph{Student User}, I want to be able to view the grades I receive for my enrolled courses, so that I can obtain feedback on my performance in an assessment or exam.
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Student} has no grades available to view, system alerts user.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Student} can change their grades for their enrolled courses.}
+\item{\emph{Student} cannot alter their grades.}
+\item{\emph{Student} cannot view or alter grades of another \emph{Student User}.}
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{red}{Must Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Student: Course Alteration - Front} &  \textbf{Student: Course Alteration - Back}  \\ 
+  \hline
+&\\[5pt]
+As a \emph{Student User}, I want to be able to edit the courses I have entered into the system, so that I can correct for errors or in light of a course change.  
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Student} has not yet entered any courses, system redirects to initial entry operation.}
+\item{Attempted edit would duplicate an enrolled course, system warns user and prevents action.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Student} can change their courses.}
+\item{\emph{All Users} with privileges to view \emph{Student's} information see the update.}
+\item{\emph{Student} cannot change courses of another \emph{Student User}.}
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{mauve}{Should Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Student: File Appeal - Front} &  \textbf{Student: File Appeal - Back}  \\ 
+  \hline
+&\\[5pt]
+As a \emph{Student User}, I want to be able to appeal a grade, in circumstances that I feel I have been unfairly marked.  
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Student} attempts to appeal a grade that they have already filed an appeal for, system warns user and prevents action.}
+\item{\emph{Student} attempts to appeal a grade after mark sheet has been produced, system warns user, prevents action.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Student} can appeal a grade.}
+\item{\emph{Lecturer} can receive the appeal.}
+\item{\emph{Student} cannot appeal a grade for another student.}
+\item{\emph{Student} cannot appeal a grade they have already attempted to appeal.}
+\item{\emph{Student} cannot appeal a grade if their mark sheet exists.}
+\end{itemize} \\
+\textbf{Duration: 4 ideal days} &\\
+\textbf{Priority:}  \textcolor{dkgreen}{Could Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Student: Mark Absence - Front} &  \textbf{Student: Mark Absence - Back}  \\ 
+  \hline
+&\\[5pt]
+As a \emph{Student User}, I want to be able to note an absence in the system, so that it is documented and I can pursue a Good Cause claim if necessary.  
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Student} attempts to mark a day in future as absent, system prompts user to contact \emph{Advisor} over scheduled future absence.}
+\item{\emph{Student} attempts to mark a day more than 2 weeks prior as absent, system notifies \emph{Advisor} and \emph{Program Director} of late marking of absence.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Student} can note an absence.}
+\item{\emph{Advisor} can see and ratify that the \emph{Student} has been absent.}
+\item{\emph{Lecturer} can observe the \emph{Student} has noted an absense from their class, but cannot see the \emph{Student's} absences from other classes.}
+\item{\emph{Student} cannot mark another \emph{Student} as absent.} 
+\item{\emph{Program Director} can see absence records of all students.}
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{dkgreen}{Could Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Student: Request Feedback - Front} &  \textbf{Student: Request Feedback - Back}  \\ 
+  \hline
+&\\[5pt]
+As a \emph{Student User}, I want to be able to request detailed feedback from a lecturer, so that it is I can better understand my performance in a given assessment or exam.
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Student} has already requested feedback from lecturer within last week, system prevents repeat.}
+\item{\emph{Student} requests feedback for course they are not enrolled on, system prevents request. }
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Student} can make a request for feedback.}
+\item{\emph{Lecturer} receives the \emph{Student's} request for feedback.}
+\item{\emph{Advisor} is notified that the \emph{Student} has requested feedback.}
+\item{\emph{Student} cannot see if other \emph{Student Users} have requested feedback.} 
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{dkgreen}{Could Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Student: Request Mark Sheet - Front} &  \textbf{Student: Request Mark Sheet - Back}  \\ 
+  \hline
+&\\[5pt]
+As a \emph{Student User}, I want to be able to request a copy of my full mark sheet, so that it is I can see the comprehensive assessment of my performance in the year.
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Student} does not yet have a mark sheet available, system alerts user.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Student} can make a request mark sheet.}
+\item{\emph{Program Director} receives the \emph{Student's} request for their mark sheet and can respond.}
+\item{\emph{Advisor} is notified that the \emph{Student} has requested their mark sheet.}
+\item{\emph{Student} cannot  request the mark sheet of other \emph{Student Users}.} 
+\end{itemize} \\
+\textbf{Duration: 1 ideal day} &\\
+\textbf{Priority:}  \textcolor{blue}{Would Like to Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Student: Pass/Fail Request - Front} &  \textbf{Student: Pass/Fail Request - Back}  \\ 
+  \hline
+&\\[5pt]
+As a \emph{Student User}, I want to be able to ask if I have passed or failed a course, so that it I can take actions to prepare for resits or otherwise if necessary.
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Student} makes request before decision has been made, system warns user information unavailable.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Student} can ask to see if they have passed or failed.}
+\item{\emph{Lecturer} receives the \emph{Student's} request for feedback.}
+\item{\emph{Advisor} is notified that the \emph{Student} has requested feedback.}
+\item{\emph{Student} cannot see if other \emph{Student Users} have requested feedback.} 
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{blue}{Would Like to Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%				LECTURER			%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Lecturer: Upload Marks - Front} &  \textbf{Lecturer: Upload Marks - Back}  \\ 
+  \hline
+&\\[5pt]
+As an \emph{Lecturer User}, I want to be able to upload the marks for my \emph{Students} exams and assessments, so that that information is available for creating mark sheets.
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Lecturer} attempts to add a mark for a \emph{Student} that isn't on the course, system warns of student number error.}
+\item{\emph{Lecturer} attempts to upload a grade that has already been uploaded, system warns of duplication error.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Lecturer} can upload marks to the system.}
+\item{\emph{Student} can view but not change their marks.}
+\item{\emph{Lecturer} denied uploading duplicate marks.} 
+\item{\emph{Lecturer} denied uploading marks for non-enrolled students.}
+\end{itemize} \\
+\textbf{Duration: 4 ideal days} &\\
+\textbf{Priority:}  \textcolor{red}{Must Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Lecturer: Process Mark Sheet - Front} &  \textbf{Lecturer: Process Mark Sheet - Back}  \\ 
+  \hline
+&\\[5pt]
+As an \emph{Lecturer User}, I want to be able to generate a mark sheet for a given \emph{Student}, so that that can be produced and used by staff.\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Lecturer} attempts to generate mark sheet for \emph{Student} that isn't on the course, system warns of student number error.}
+\item{\emph{Lecturer} attempts to upload a generate mark sheet that already exists, system warns of duplication error.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Lecturer} can process creation of a mark sheet. }
+\item{Mark sheet is returned in correct format.}
+\item{\emph{Program Director} receives mark sheet automatically.}
+\item{\emph{Lecturer} denied creating duplicate mark sheets.} 
+\item{\emph{Lecturer} denied creating mark sheets for non-enrolled students.}
+\end{itemize} \\
+\textbf{Duration: 8 ideal days} &\\
+\textbf{Priority:}  \textcolor{red}{Must Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Lecturer: View Mark Sheet - Front} &  \textbf{Lecturer: View Mark Sheet - Back}  \\ 
+  \hline
+&\\[5pt]
+As an \emph{Lecturer User}, I want to be able to view the mark sheet for one of my \emph{Students}, so that I can review the report that has been generated.\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Lecturer} attempts to view a mark sheet for a \emph{Student} not on their course, system prevents action.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Lecturer} can access mark sheet of a \emph{Student} on their course.}
+\item{\emph{Lecturer} cannot access mark sheet of \emph{Students} on other courses.}
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{mauve}{Should Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Lecturer: Review Appeal - Front} &  \textbf{Lecturer: Review Appeal - Back}  \\ 
+  \hline
+&\\[5pt]
+As an \emph{Lecturer User}, I want to be able to review an appeal made one of my \emph{Students}, so that I can determine whether to grant the appeal or not.\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Lecturer} attempts to review an appeal made by a \emph{Student} not on their course, system prevents action.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Lecturer} can review an appeal made by a \emph{Student} on their course.}
+\item{\emph{Lecturer} cannot review appeals made by \emph{Students} on other courses.}
+\end{itemize} \\
+\textbf{Duration: 1 ideal day} &\\
+\textbf{Priority:}  \textcolor{mauve}{Should Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Lecturer: Confirm Absence - Front} &  \textbf{Lecturer: Confirm Absence - Back}  \\ 
+  \hline
+&\\[5pt]
+As an \emph{Lecturer User}, I want to be able to confirm an absence made one of my \emph{Students}, so that the logging of this absence can be validated.\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Lecturer} can deny or remove an absence marked by a \emph{Student}.}
+\item{There are no absences available for \emph{Lecturer} to confirm or deny.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Lecturer} can view, confirm or remove an absence marked by a \emph{Student}.}
+\item{\emph{Lecturer} cannot confirm or deny an absence marked by a \emph{Student} on another course.}
+\item{\emph{Student} cannot confirm or deny an absence marked by any \emph{Student}, including themselves.}
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{dkgreen}{Could Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Lecturer: Give Feedback - Front} &  \textbf{Lecturer: Give Feedback - Back}  \\ 
+  \hline
+&\\[5pt]
+As an \emph{Lecturer User}, I want to be able to respond to a feedback request made one of my \emph{Students}, so that I can provide the student with the information they desire. 
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Lecturer} can deny or remove a feedback request made by a \emph{Student}.}
+\item{There are no feedback requests for \emph{Lecturer} to respond to.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Lecturer} can view, respond to or remove a feedback request made by a \emph{Student}.}
+\item{\emph{Lecturer} cannot respond to or remove a feedback request maded by a \emph{Student} on another course.}
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{dkgreen}{Could Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Lecturer: Pass/Fail Request - Front} &  \textbf{Lecturer: Pass/Fail Request - Back}  \\ 
+  \hline
+&\\[5pt]
+As a \emph{Lecturer User}, I want to be able to view a list of the students who have passed and failed my course, so that it I can contact advisors as is relevant.
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Lecturer} wants to view list of students who have passed and failed other courses, system denies.}
+\item{\emph{Lecturer} wants to view list before decision has been made, system warns user information unavailable.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Lecturer} can view list of students who have passed and failed their course.}
+\item{\emph{Lecturer} cannot view list for another class.}
+\end{itemize} \\
+\textbf{Duration: 4 ideal days} &\\
+\textbf{Priority:}  \textcolor{blue}{Would Like to Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+%%%%%%%%%%%%%%%%%%%%%				ADVISOR				%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Advisor: Verify Student Enrolment - Front} &  \textbf{Advisor: Verify Student Enrolment - Back}  \\ 
+  \hline
+&\\[5pt]
+As an \emph{Advisor User}, I want to verify the courses that my \emph{Students} are on, so that the information in the system can be confirmed.
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Student} has made enrolment error, \emph{Advisor} rejects selected courses, system warns student.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Advisor} can confirm enrolment of their students.}
+\item{\emph{Student} receives notification of their enrolment.}
+\item{\emph{Advisor} cannot confirm enrolment of students not under their guidance.} 
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{red}{Must Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Advisor: View Mark sheet - Front} &  \textbf{Advisor: View Mark sheet  - Back}  \\ 
+  \hline
+&\\[5pt]
+As an \emph{Advisor User}, I want to be able to view mark sheets of my \emph{Students}, to assess their progress.
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Advisor} attempts to view a mark sheet for a \emph{Student} they don't advise, system prevents.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Advisor} can view mark sheets of their students.}
+\item{\emph{Advisor} cannot view mark sheets for students not under their guidance.} 
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{mauve}{Should Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Advisor: View Feedback - Front} &  \textbf{Advisor: View Feedback  - Back}  \\ 
+  \hline
+&\\[5pt]
+As an \emph{Advisor User}, I want to be able to view feedback that my \emph{Students} have received from a \emph{Lecturer}, to understand the breakdown of a students result.
+\newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Advisor} attempts to view feedback for a \emph{Student} they don't advise, system prevents.}
+\item{\emph{Advisor} has no feedback to view for any student.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Advisor} can view feedback of their students.}
+\item{\emph{Advisor} cannot view feedback for students not under their guidance.} 
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{mauve}{Should Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Advisor: Contact Failing Students - Front} &  \textbf{Advisor:  Contact Failing Students   - Back}  \\ 
+  \hline
+&\\[5pt]
+As an \emph{Advisor User}, I want to be able to contact my \emph{Students} who are failing their courses, to discuss ways to help them succeed.\newline
+\textbf{Conversations:}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Advisor} can find students who are failing and contact them.}
+\item{\emph{Advisor} cannot find failing students who are not under their guidance.} 
+\end{itemize} \\
+\textbf{Duration: 4 ideal days} &\\
+\textbf{Priority:}  \textcolor{blue}{Would Like to Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%				PROG DIR			%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Program Director: Access Mark Sheet - Front} &  \textbf{Program Director: Access Mark Sheet - Back}  \\ 
+  \hline
+%&\\[5pt]
+As an \emph{Program Director User}, I want to be able to view the mark sheet of any \emph{Student} enrolled on the program, to be able to determine if they have passed or failed the year. \newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{Program Director} attempts to access mark sheet before it has been processed, system warns information unavailable.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Program Director} can access mark sheet of any student on course.}
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{red}{Must Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{Program Director: Decide Pass/Fail - Front} &  \textbf{Program Director: Decide Pass/Fail - Back}  \\ 
+  \hline
+%&\\[5pt]
+As an \emph{Program Director User}, I want to be able to decide whether a \emph{Student} has passed or failed the year, so that their lecturers and advisors can be made aware.  \newline
+\textbf{Conversations:}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{Program Director} can decide if a student has passed or failed.}
+\item{\emph{Lecturer} is notified when one of their students has been marked pass or fail.}
+\item{\emph{Advisor} is notified when one of their students has been marked pass or fail.}
+\item{\emph{Lecturer} is not notified when a student outside their course has been marked pass or fail.}
+\item{\emph{Advisor} is not notified when a student not under their guidance has been marked pass or fail.}
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{red}{Must Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+%%%%%%%%%%%%%%%%%%%%%				SYS ADMIN			%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{System Administrator: Update System - Front} &  \textbf{System Administrator: Update System - Back}  \\ 
+  \hline
+%&\\[5pt]
+As an \emph{System Administrator User}, I want to be able to update the system when new software versions are available, to keep the system secure and up to date.  \newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{System Administrator} attempts to perform update when no new update available, system warns that system is up to date.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{System Administrator} can update the system when a new patch is available.}
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{red}{Must Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{System Administrator: Change A Student's Classes - Front} &  \textbf{System Administrator: Change A Student's Classes - Back}  \\ 
+  \hline
+%&\\[5pt]
+As an \emph{System Administrator User}, I want to be able to change any class a \emph{Student} is enrolled in, to correct for errors or adjust for real life changes.  \newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{System Administrator} attempts to change a class after some assessments have been undertake, system warns administrator and allows change.}
+\item{\emph{System Administrator} attempts to change a class after pass/fail has been determined, system warns administrator of course completion, prevents action.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{System Administrator} can change the classes a student is enrolled in.}
+\item{\emph{Student} can see the changes that have been made.}
+\item{\emph{Lecturer,Advisor} can see the changes that have been made for their students.}
+\item{\emph{Lecturer} is notified if a student is added or removed from their class.}
+\end{itemize} \\
+\textbf{Duration: 4 ideal days} &\\
+\textbf{Priority:}  \textcolor{red}{Must Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{System Administrator: Change A Student's Grades - Front} &  \textbf{System Administrator: Change A Student's Grades - Back}  \\ 
+  \hline
+%&\\[5pt]
+As an \emph{System Administrator User}, I want to be able to change any grade a \emph{Student} has received, to correct for errors or adjust for real life changes such as successful appeals.  \newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{System Administrator} attempts to change a grade before any assessments have been undertaken, system warns administrator of no grades being available.}
+\item{\emph{System Administrator} attempts to change a grade after mark sheet has been generated, system warns administrator and suggests re-generation.}
+\item{\emph{System Administrator} attempts to change a grade after pass/fail has been determined, system warns administrator of course completion, prevents action.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{System Administrator} can change the grades a student has recieved.}
+\item{\emph{Student} can see the changes that have been made.}
+\item{\emph{Lecturer,Advisor} can see the changes that have been made for their students.}
+\item{\emph{Lecturer, Advisor} are notified if the grade has changed for one of their students.}
+\end{itemize} \\
+\textbf{Duration: 4 ideal days} &\\
+\textbf{Priority:}  \textcolor{red}{Must Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{System Administrator: View All Student's Classes - Front} &  \textbf{System Administrator: View All Student's Classes - Back}  \\ 
+  \hline
+&\\[5pt]
+As an \emph{System Administrator User}, I want to be able to view all Classes and the \emph{Students} enrolled on them, to be have access to the full information in the system.  \newline
+\textbf{Conversations:}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{System Administrator} can view a report of all Classes and the Students within them.}
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{mauve}{Should Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\begin{center}
+\begin{tabular}{ | m{8cm}  |  m{8cm}  | } 
+ \hline
+ \textbf{System Administrator: View All Student's Grades - Front} &  \textbf{System Administrator: View All Student's Grades - Back}  \\ 
+  \hline
+&\\[5pt]
+As an \emph{System Administrator User}, I want to be able to view all grades obtained by all \emph{Students}, to be have access to the full information in the system.  \newline
+\textbf{Conversations:}
+\begin{enumerate}
+\item{\emph{System Administrator} attempts to view list before any assessments have been taken, system warns that no information is available.}
+\end{enumerate}
+& \textbf{Acceptance Tests:} 
+\begin{itemize}
+\item{\emph{System Administrator} can view a report of all Students and the grades they have achieved.}
+\end{itemize} \\
+\textbf{Duration: 2 ideal days} &\\
+\textbf{Priority:}  \textcolor{mauve}{Should Have} & \\
+ \hline
+\end{tabular}
+\end{center}
+
+\subsection*{Release Plan}
+The development of this task has been determined to have an iteration length of 30 ideal days per development cycle. The sum total of estimated ideal days for full development as described in this report is 74 ideal days. Thus, this software will necessitate a multi-stage release plan, based on the immediacy with which certain activities are required, or how critical they are to the core functionality desired by the program. For this reason, each story card that has been addressed has been assigned a priority level. The program should be completable within 3 full iterations, but it must be noted that during the second and third development cycles, time will need to be assigned to bug fixes, among other work, that cannot be accounted for at present as it is impossible to make accurate predictions of the time this will consume. These are assigned a recommendation of 4 ideal days to additional work, hence the second development cycle involves only 26 days of covering user stories. Note that is likely to be a far from accurate estimate.
+\paragraph{First Iteration Cycle}
+The first iteration should complete as much of the core functionality of the program as possible. The total time required to complete all user stories marked as must have is 38 days, thus there is some overspill into the second development cycle. The first iteration will involve addressing the following user stories:
+\begin{itemize}
+\item{\textcolor{red}{All Users: Login}}
+\item{\textcolor{red}{Student: Course Entry}}
+\item{\textcolor{red}{Student: View Grades}}
+\item{\textcolor{red}{Lecturer: Upload Marks}}
+\item{\textcolor{red}{Lecturer: Process Mark Sheet}}
+\item{\textcolor{red}{Advisor: Verify Student Enrolment}}
+\item{\textcolor{red}{Program Director: Access Mark Sheet}}
+\item{\textcolor{red}{Program Director: Decide Pass/Fail}}
+\item{\textcolor{red}{System Administrator: Update System}}
+\end{itemize}
+These total to 30 story points, and thus should be achievable within the prescribed timeframe. This cycle should end with the first release of the program.
+\paragraph{Second Iteration Cycle}
+The second iteration should aim to address the following:
+\begin{itemize}
+\item{\textcolor{red}{System Administrator: Change A Student's Classes}}
+\item{\textcolor{red}{System Administrator: Change A Student's Grades}}
+\item{\textcolor{mauve}{Student: Course Alteration}}
+\item{\textcolor{mauve}{Lecturer: View Mark Sheet}}
+\item{\textcolor{mauve}{Lecturer: Review Appeal}}
+\item{\textcolor{mauve}{Advisor: View Mark Sheet}}
+\item{\textcolor{mauve}{Advisor: View Feedback}}
+\item{\textcolor{mauve}{System Administrator: View All Classes}}
+\item{\textcolor{mauve}{System Administrator: View All Grades}}
+\item{\textcolor{dkgreen}{Student: File Appeal}}
+\item{\textcolor{dkgreen}{Student: Mark Absence}}
+\end{itemize}
+These total to 26 story points. Accounting for the assigned 4 ideal days for maintenance, bug fixes and other development needs this reaches the 30 ideal days for the development cycle.
+\paragraph{Third Iteration Cycle}
+The final iteration should seek to address the following remaining user stories:
+\begin{itemize}
+\item{\textcolor{dkgreen}{Student: Request Feedback}}
+\item{\textcolor{dkgreen}{Lecturer: Confirm Absence}}
+\item{\textcolor{dkgreen}{Lecturer: Give Feedback}}
+\item{\textcolor{dkgreen}{Advisor: View Mark Sheet}}
+\item{\textcolor{blue}{Student: Request Mark Sheet}}
+\item{\textcolor{blue}{Student: Pass/Fail Request}}
+\item{\textcolor{blue}{Lecturer: Pass/Fail Request}}
+\item{\textcolor{blue}{Advisor: Contact Failing Students}}
+\end{itemize}
+
+The final iteration will take 22 ideal days when accounting again for 4 ideal days for maintenance, bug fixes and other development, and 18 story points. Thus this final iteration will not require a full development cycle.
+\newpage
+\subsection*{Appendix: Uncertainties and Assumptions}
+\textbf{Assumptions}
+\begin{itemize}
+\item{Assume rapid response time not an issue, most operations are small and it is assumed that the maximum processing time for any will be insignificant on a modern computer.}\item{Assume system does not have to generate credentials for users, these already exist and system simply makes use of them.}
+\item{Assume most of could have/would like to have functionality are things users could do outside of program, such as contacting each other via email, but software would facilitate automation of. Thus, their relegation to lower priority does not reflect importance of task, more the ease with which it can be done independently of this system.}
+\item{Assume that functionality of the program will be delivered within one GUI environment, which presents different options to the user based on privilege of user role.}
+\item{Assume that it is acceptable to release the program without the System Administrator having the ability to change student's classes or grades and accept that this functionality can wait until second release.}
+\end{itemize}
+\textbf{Uncertainties}
+\begin{itemize}
+\item{Unknown whether customer has a database or other computer systems that they desire this software to be integrated with.}
+\item{Unknown whether customer would prefer system as a web application or stand alone program, and what level of cross-platform would be required for a stand alone system.}
+\item{Unknown if customer already has systems to control marking absences from exams or making appeals for grades. If so these user stories are redundant in this project.}
+\end{itemize}
+
+\end{document}  

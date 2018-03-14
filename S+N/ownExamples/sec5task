@@ -1,0 +1,12 @@
+start	lea	R1,13[R0]	;R1 = 13
+	store	R1,x[R0]	;x = R1 = 13
+	lea	R2,2[R0]	;R2 = 2
+	add	R3,R1,R2	;R3 = x + 2
+	store	R3,y[R0]	;y = x + 2
+	lea	R4,3[R0]	;R4 = 3
+	mul	R5,R3,R4	;R5 = y * 3
+	sub	R6,R1,R5	;R6 = x - ( y * 3 )
+	store	R5,z[R0]	;z = x - ( y * 3 )
+
+
+	

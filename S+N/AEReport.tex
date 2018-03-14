@@ -1,0 +1,74 @@
+\documentclass[10pt, oneside]{article}
+\usepackage{datetime}
+\newdate{date}{21}{11}{2017}
+
+\usepackage{listings}
+\usepackage{graphicx,color}
+\usepackage{listings}
+\usepackage[margin=1in]{geometry}
+\usepackage{array}
+
+\geometry{letterpaper}
+\usepackage[parfill]{parskip} 
+								
+\usepackage{amssymb}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstdefinelanguage{Sigma16}{
+sensitive = true,
+keywords={},
+keywords = [2]{LEA, LOAD, CMPLT, CMPEQ, CMPGT, JUMPF, JUMPT, JUMP, ADD, AND, STORE, TRAP, DATA},
+keywords = [3]{%variables
+	X,[0],[i], n , possum, oddcount, ocount, negcount, ncount
+}, 
+keywordstyle=[2]\color{blue},
+keywordstyle=[3]\color{mauve},
+numbers=left,
+numberstyle=\scriptsize,
+comment=[l]{;},
+commentstyle=\color{dkgreen}\ttfamily
+}
+
+
+\lstset{frame=tb,
+language=Sigma16,
+aboveskip=3mm,
+belowskip=3mm,
+}
+
+\title{\vspace{-1.6cm}Systems \& Networks 2017 Assessed Exercise}
+\author{Paul McHard - 2085227M}
+\date{\displaydate{date}}
+
+\begin{document}
+\maketitle
+\subsection*{Status Report}
+\textbf{Program State:} The program has been fully completed as per the specification and returns expected output for \textbf{``Acceptance Test"} data. Additional test data was also used, as shown in the Evidence Table below, and works accurately. 
+
+\textbf{Limitations and Bugs: }Three limitations exist for this code. Firstly, if data is added or removed from array X by the user without altering the value of n accordingly, the program will run as if there is no problem and not observe an error, but will return incorrect results. The program is incapable of ensuring that the true size of array \textit{X} and the integer value \textit{n}, which is taken as array size, are the same. The other limitations both arise from Sigma16 itself. As it uses a 16-bit architecture, it is incapable of handling values outwith the range of 16 bit two's complement: -32,768 to 32,767. This counts as much for input values as for output, as even if all input values are within the range it could cause overflow in \textbf{possum}. Again due to architecture limitations, there is a maximum of 64kB of addressable memory, which limits possible array length. The program has no known bugs that have been found.
+
+\textbf{Evidence: }	The following data was used to test the system.
+\begin{center}
+\begin{tabular}{ | m{8cm} | m{2cm}| m{2cm} | m{2cm} | } 
+ \hline
+ \textbf{Data} & \textbf{possum} & \textbf{oddcount} & \textbf{negcount} \\ 
+  \hline
+X = [3, -6, 27, 101, 50, 0, -20, -21, 19, 6, 4, -10]  & 210 & 4 & 4\\ 
+  \hline
+ X= [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] & 0 & 0 & 0 \\ 
+ \hline
+ X =[1, 3, 5, 7, 9, -8. -6, -4, -2, 0] & 25 & 5 & 4 \\
+ \hline
+ X= [15879, 3443, 5817, 117, 809, -844, -652, -32768] & 26065 & 5 & 3\\
+ \hline
+\end{tabular}
+\end{center}
+\paragraph{Feedback}
+\newpage
+\section*{Code Listing}
+\lstinputlisting[language=Sigma16]{SNAE_PaulMcHard.asm}
+
+\end{document}  
